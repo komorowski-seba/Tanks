@@ -12,15 +12,14 @@ import {Tank} from '../../Items/Tank/tank';
 export class ViewGameComponent {
   @ViewChild('sceneContainer', { static: true }) sceneContainer!: ElementRef<HTMLDivElement>;
 
-  private player: Tank;
+  private player: Tank = new Tank(10, 10, 40, 20);
 
   constructor(private physicService: GameService) {
   }
 
   ngOnInit() {
     this.physicService.createScene(this.sceneContainer.nativeElement, 1200, 800);
-
-    this.player = new Tank(10, 10, 100, 800);
+    console.log(" <<< init tank")
     this.physicService.AddGameObject(this.player);
   };
 }
