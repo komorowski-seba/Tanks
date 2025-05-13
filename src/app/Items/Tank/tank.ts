@@ -1,4 +1,4 @@
-import { Engine, Render, Runner, Bodies, Body, Composite, Events, World } from 'matter-js';
+import Matter, { Engine, Render, Runner, Bodies, Body, Composite, Events, World } from 'matter-js';
 import { GameObject } from '../game-object';
 
 export class Tank implements GameObject {
@@ -6,17 +6,28 @@ export class Tank implements GameObject {
   constructor(x: number, y: number, width: number, height: number) {
 
     // Gracz
-    this.body = Bodies.rectangle(x, y, width, height, {
-      label: 'tank',
-      isStatic: true,
-      render: {
-        sprite: {
-          texture: 'assets/box-texture.jpg',
-          xScale: 1,
-          yScale: 1
-        }
-      },
-    });
+    // this.body = Bodies.rectangle(x, y, width, height, {
+    //   label: 'tank',
+    //   isStatic: true,
+    //   render: {
+    //     sprite: {
+    //       texture: 'assets/box-texture.jpg',
+    //       xScale: 1,
+    //       yScale: 1
+    //     }
+    //   },
+    // });
+
+    this.body = Bodies.rectangle(x, y, width, height, { render: { fillStyle: 'blue' } });
+
+    // document.addEventListener('click', (event) => {
+    //   const box = Bodies.rectangle(event.clientX, event.clientY, 40, 40, {
+    //     render: { fillStyle: 'blue' },
+    //   });
+    //
+    //   World.add(world, box);
+    // });
+
 
     // // "Nagroda" — obiekt do kolizji
     // this.prize = Bodies.rectangle(600, 400, 80, 80, {
@@ -32,18 +43,16 @@ export class Tank implements GameObject {
   public update() {
 
   }
+
+  public getBody(): Matter.Body {
+    return this.body;
+  }
 }
 
 
 /*
 
-document.addEventListener('click', (event) => {
-    const box = Bodies.rectangle(event.clientX, event.clientY, 40, 40, {
-        render: { fillStyle: 'blue' },
-    });
 
-    World.add(world, box);
-});
 
 function addCircle(x, y) {
     const circle = Bodies.circle(x, y, 20, {
