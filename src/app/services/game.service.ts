@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Engine, Render, Runner, Bodies, Body, Composite, Events, World } from 'matter-js';
-import {GameObject} from '../Items/game-object';
+import { GameObject } from '../Items/game-object';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +32,6 @@ export class GameService {
   }
 
   public AddGameObject(gameObject: GameObject): void {
-
+    World.add(this.world, gameObject.getBody());
   }
 }
