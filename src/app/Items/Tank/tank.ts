@@ -1,24 +1,27 @@
+
 import Matter, { Engine, Render, Runner, Bodies, Body, Composite, Events, World } from 'matter-js';
 import { GameObject } from '../game-object';
+import {DOWN_VECTOR, LEFT_VECTOR, RIGHT_VECTOR, UP_VECTOR} from '../Common/vectors';
 
 export class Tank implements GameObject {
   private body!: Body
   constructor(x: number, y: number, width: number, height: number) {
 
     // Gracz
-    // this.body = Bodies.rectangle(x, y, width, height, {
-    //   label: 'tank',
-    //   isStatic: true,
-    //   render: {
-    //     sprite: {
-    //       texture: 'assets/box-texture.jpg',
-    //       xScale: 1,
-    //       yScale: 1
-    //     }
-    //   },
-    // });
+    this.body = Bodies.rectangle(x, y, width, height, {
+      label: 'tank',
+      isStatic: true,
+      render: {
+        fillStyle: 'blue'
+        // sprite: {
+          // texture: 'assets/tank.png',
+          // xScale: 1,
+          // yScale: 1
+        // }
+      },
+    });
 
-    this.body = Bodies.rectangle(x, y, width, height, { render: { fillStyle: 'blue' } });
+    // this.body = Bodies.rectangle(x, y, width, height, { render: { fillStyle: 'blue' } });
 
     // document.addEventListener('click', (event) => {
     //   const box = Bodies.rectangle(event.clientX, event.clientY, 40, 40, {
@@ -40,12 +43,33 @@ export class Tank implements GameObject {
 
   }
 
-  public update() {
+  public update(): void {
 
   }
 
   public getBody(): Matter.Body {
     return this.body;
+  }
+
+  public keyEvent(key: string): void {
+    switch (key) {
+      case 'w':
+        Matter.Body.setPosition(this.body, Matter.Vector.add(this.body.position, UP_VECTOR));
+        break;
+
+      case 's':
+        Matter.Body.setPosition(this.body, Matter.Vector.add(this.body.position, DOWN_VECTOR));
+        break;
+
+      case 'a':
+        Matter.Body.setPosition(this.body, Matter.Vector.add(this.body.position, LEFT_VECTOR));
+        break;
+
+      case 'd':
+        Matter.Body.setPosition(this.body, Matter.Vector.add(this.body.position, RIGHT_VECTOR));
+        break;
+    }
+
   }
 }
 

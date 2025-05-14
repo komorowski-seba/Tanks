@@ -18,8 +18,12 @@ export class ViewGameComponent {
   }
 
   ngOnInit() {
-    this.physicService.createScene(this.sceneContainer.nativeElement, 1200, 800);
-    console.log(" <<< init tank")
+    this.physicService.createScene(this.sceneContainer.nativeElement, 800, 700);
     this.physicService.AddGameObject(this.player);
   };
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    this.player.keyEvent(event.key);
+  }
 }
