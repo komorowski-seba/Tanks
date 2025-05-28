@@ -9,10 +9,10 @@ import {Tank} from '../../Items/Tank/tank';
   templateUrl: './view-game.component.html',
   styleUrl: './view-game.component.css'
 })
-export class ViewGameComponent {
+export class ViewGameComponent implements OnInit {
   @ViewChild('sceneContainer', { static: true }) sceneContainer!: ElementRef<HTMLDivElement>;
 
-  private player: Tank = new Tank(10, 10, 40, 20);
+  private player: Tank = new Tank(10, 10, 20, 40);
 
   constructor(private physicService: GameService) {
   }
