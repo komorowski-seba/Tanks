@@ -1,21 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Engine, Render, Runner, Bodies, Body, Composite, Events, World } from 'matter-js';
+import { Engine, Render, Runner, Bodies, Composite, Events, World } from 'matter-js';
 import { GameObject } from '../Items/game-object';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
-  private engine!: Engine;
-  public world!: World;
+  private _engine!: Engine;
+  private _world!: World;
+
+  public get world(): World {
+    return this._world;
+  }
 
   constructor() {}
 
   public createScene(sceneElement: any, screenWidth: number, screenHeight: number): void {
-    this.engine = Engine.create();
+    this._engine = Engine.create();
     const render = Render.create({
       element: sceneElement,
-      engine: this.engine,
+      engine: this._engine,
       options: {
         width: screenWidth,
         height: screenHeight,
@@ -24,14 +28,14 @@ export class GameService {
       }
     })
 
-    Engine.run(this.engine);
+    Engine.run(this._engine);
     Render.run(render);
-    Runner.run(Runner.create(), this.engine);
+    Runner.run(Runner.create(), this._engine);
 
-    this.world = this.engine.world;
+    this._world = this._engine.world;
   }
 
   public AddGameObject(gameObject: GameObject): void {
-    World.add(this.world, gameObject.getBody());
+    World.add(this._world, gameObject.getBody());
   }
 }
