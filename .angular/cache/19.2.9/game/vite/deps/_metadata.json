@@ -1,31 +1,31 @@
 {
-  "hash": "7723be7a",
+  "hash": "221079d3",
   "configHash": "f7b13336",
-  "lockfileHash": "5724f899",
-  "browserHash": "ad6e2902",
+  "lockfileHash": "68b5b2d5",
+  "browserHash": "82f1dda5",
   "optimized": {
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "68488d54",
+      "fileHash": "cc576219",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "bb0bb21d",
+      "fileHash": "f10e14b4",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "15a7e818",
+      "fileHash": "33328b22",
       "needsInterop": false
     },
     "matter-js": {
       "src": "../../../../../../node_modules/matter-js/build/matter.js",
       "file": "matter-js.js",
-      "fileHash": "e0abb5a7",
+      "fileHash": "8fed8078",
       "needsInterop": true
     }
   },
