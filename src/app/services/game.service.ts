@@ -8,6 +8,7 @@ import { GameObject } from '../Items/game-object';
 export class GameService {
   private _engine!: Engine;
   private _world!: World;
+  private _items!: GameObject[];
 
   public get world(): World {
     return this._world;
@@ -37,5 +38,6 @@ export class GameService {
 
   public AddGameObject(gameObject: GameObject): void {
     World.add(this._world, gameObject.getBody());
+    // this._items.push(gameObject);
   }
 }
