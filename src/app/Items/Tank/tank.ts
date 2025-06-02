@@ -1,14 +1,17 @@
 
 import Matter, { Engine, Render, Runner, Bodies, Body, Composite, Events, World } from 'matter-js';
 import { GameObject } from '../game-object';
+import {createMachine, createActor, Actor} from 'xstate';
 import {DOWN_VECTOR, LEFT_VECTOR, RIGHT_VECTOR, UP_VECTOR} from '../Common/vectors';
 
 export class Tank implements GameObject {
-  private body!: Body
+  private readonly _body!: Body;
+  private _actor!:  Actor<any>;
+
   constructor(x: number, y: number, width: number, height: number) {
 
     // Gracz
-    this.body = Bodies.rectangle(x, y, width, height, {
+    this._body = Bodies.rectangle(x, y, width, height, {
       label: 'tank',
       isStatic: true,
       render: {
@@ -21,6 +24,7 @@ export class Tank implements GameObject {
       },
     });
 
+    this.createStates();
     // this.body = Bodies.rectangle(x, y, width, height, { render: { fillStyle: 'blue' } });
 
     // document.addEventListener('click', (event) => {
@@ -48,33 +52,119 @@ export class Tank implements GameObject {
   }
 
   public getBody(): Matter.Body {
-    return this.body;
+    return this._body;
   }
 
   public keyEvent(key: string): void {
     switch (key) {
       case 'w':
-        Matter.Body.setPosition(this.body, Matter.Vector.add(this.body.position, UP_VECTOR));
+        Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, UP_VECTOR));
         break;
 
       case 's':
-        Matter.Body.setPosition(this.body, Matter.Vector.add(this.body.position, DOWN_VECTOR));
+        Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, DOWN_VECTOR));
         break;
 
       case 'a':
-        Matter.Body.setPosition(this.body, Matter.Vector.add(this.body.position, LEFT_VECTOR));
+        Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, LEFT_VECTOR));
         break;
 
       case 'd':
-        Matter.Body.setPosition(this.body, Matter.Vector.add(this.body.position, RIGHT_VECTOR));
+        Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, RIGHT_VECTOR));
         break;
     }
 
+    this._actor.start();
+  }
+
+  private createStates(): void {
+
+    const lightMachine = createMachine({
+      id: 'light',
+      initial: 'green',
+      states: {
+        green: {
+          on: {
+            TIMER: 'yellow'
+          }
+        },
+        yellow: {
+          on: {
+            TIMER: 'red'
+          }
+        },
+        red: {
+          on: {
+            TIMER: 'green'
+          }
+        }
+      }
+    });
+
+    this._actor = createActor(lightMachine);
+    this._actor.subscribe((state) => {
+      console.log(' || >>> ' + state.value);
+    });
+    this._actor.start();
+
+    console.log(' >>>> start ');
   }
 }
 
 
 /*
+
+
+-------------------------------------------------------------------------------------------------------------
+
+import { createMachine, createActor } from 'xstate';
+
+const machine = createMachine({
+  id: 'example',
+  initial: 'idle',
+  states: {
+    idle: { on: { NEXT: 'loading' } },
+    loading: { on: { SUCCESS: 'success', FAIL: 'error' } },
+    success: {},
+    error: {},
+  },
+});
+
+const actor = createActor(machine).start();
+
+// updateState "symuluje" metodę przypisaną do konkretnego stanu
+function updateState(state: ReturnType<typeof actor.getSnapshot>) {
+  switch (state.value) {
+    case 'idle':
+      console.log('Still idle. Let\'s start!');
+      actor.send({ type: 'NEXT' });
+      break;
+
+    case 'loading':
+      console.log('Loading... simulate success');
+      actor.send({ type: 'SUCCESS' });
+      break;
+
+    case 'success':
+      console.log('We succeeded!');
+      break;
+
+    case 'error':
+      console.log('An error occurred.');
+      break;
+
+    default:
+      console.log('Unknown state.');
+  }
+}
+
+
+updateState(actor.getSnapshot()); // z idle -> NEXT
+updateState(actor.getSnapshot()); // z loading -> SUCCESS
+updateState(actor.getSnapshot()); // z success -> brak zmian
+
+
+-------------------------------------------------------------------------------------------------------------
 
 
 
