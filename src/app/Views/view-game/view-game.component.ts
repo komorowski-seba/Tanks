@@ -19,7 +19,7 @@ export class ViewGameComponent implements OnInit {
 
   ngOnInit() {
     this.physicService.createScene(this.sceneContainer.nativeElement, 800, 700);
-    this.physicService.AddGameObject(this.player);
+    this.physicService.addGameObject(this.player);
   };
 
   @HostListener('window:keydown', ['$event'])
