@@ -36,8 +36,12 @@ export class GameService {
     this._world = this._engine.world;
   }
 
-  public AddGameObject(gameObject: GameObject): void {
+  public addGameObject(gameObject: GameObject): void {
     World.add(this._world, gameObject.getBody());
     // this._items.push(gameObject);
+  }
+
+  public update(): void {
+
   }
 }

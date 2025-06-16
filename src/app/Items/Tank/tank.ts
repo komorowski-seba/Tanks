@@ -1,12 +1,12 @@
 
 import Matter, { Engine, Render, Runner, Bodies, Body, Composite, Events, World } from 'matter-js';
 import { GameObject } from '../game-object';
-import {createMachine, createActor, Actor} from 'xstate';
+import { createMachine, createActor, Actor } from 'xstate';
 import {DOWN_VECTOR, LEFT_VECTOR, RIGHT_VECTOR, UP_VECTOR} from '../Common/vectors';
 
 export class Tank implements GameObject {
   private readonly _body!: Body;
-  private _actor!:  Actor<any>;
+  private _actor!: Actor<any>;
 
   constructor(x: number, y: number, width: number, height: number) {
 
@@ -48,7 +48,7 @@ export class Tank implements GameObject {
   }
 
   public update(): void {
-
+    console.log(' update >> ');
   }
 
   public getBody(): Matter.Body {
@@ -109,6 +109,39 @@ export class Tank implements GameObject {
 
     console.log(' >>>> start ');
   }
+
+  // updateState "symuluje" metodę przypisaną do konkretnego stanu
+  private updateState(state: Actor<any>): void {
+    switch (state.getSnapshot()) {
+      case 'idle':
+        console.log('Still idle. Let\'s start!');
+        // Actor.send({ type: 'NEXT' });
+        break;
+
+      case 'loading':
+        console.log('Loading... simulate success');
+        // Actor.send({ type: 'SUCCESS' });
+        break;
+
+      case 'success':
+        console.log('We succeeded!');
+        break;
+
+      case 'error':
+        console.log('An error occurred.');
+        break;
+
+      default:
+        console.log('Unknown state.');
+    }
+  }
+
+
+  // updateState(actor.getSnapshot()); // z idle -> NEXT
+  // updateState(actor.getSnapshot()); // z loading -> SUCCESS
+  // updateState(actor.getSnapshot()); // z success -> brak zmian
+
+
 }
 
 
@@ -131,37 +164,6 @@ const machine = createMachine({
 });
 
 const actor = createActor(machine).start();
-
-// updateState "symuluje" metodę przypisaną do konkretnego stanu
-function updateState(state: ReturnType<typeof actor.getSnapshot>) {
-  switch (state.value) {
-    case 'idle':
-      console.log('Still idle. Let\'s start!');
-      actor.send({ type: 'NEXT' });
-      break;
-
-    case 'loading':
-      console.log('Loading... simulate success');
-      actor.send({ type: 'SUCCESS' });
-      break;
-
-    case 'success':
-      console.log('We succeeded!');
-      break;
-
-    case 'error':
-      console.log('An error occurred.');
-      break;
-
-    default:
-      console.log('Unknown state.');
-  }
-}
-
-
-updateState(actor.getSnapshot()); // z idle -> NEXT
-updateState(actor.getSnapshot()); // z loading -> SUCCESS
-updateState(actor.getSnapshot()); // z success -> brak zmian
 
 
 -------------------------------------------------------------------------------------------------------------
