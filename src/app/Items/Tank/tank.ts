@@ -48,7 +48,26 @@ export class Tank implements GameObject {
   }
 
   public update(): void {
-    console.log(' update >> ');
+    const state = this._actor.getSnapshot();
+    switch (state.value) {
+      case 'Stop':
+        this.stateStop();
+        // Actor.send({ type: 'NEXT' });
+        break;
+
+      case 'TurnLeft':
+        this.stateTurnLeft();
+        // Actor.send({ type: 'SUCCESS' });
+        break;
+
+      case 'TurnRight':
+        this.stateTurnRight();
+        break;
+
+      case 'GoStraight':
+        this.stateGoStraight();
+        break;
+    }
   }
 
   public getBody(): Matter.Body {
@@ -73,75 +92,56 @@ export class Tank implements GameObject {
         Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, RIGHT_VECTOR));
         break;
     }
-
-    this._actor.start();
   }
 
   private createStates(): void {
-
     const lightMachine = createMachine({
-      id: 'light',
-      initial: 'green',
+      id: 'tank',
+      initial: 'Stop',
       states: {
-        green: {
+        Stop: {
           on: {
-            TIMER: 'yellow'
+            TIMER: 'Stop'
           }
         },
-        yellow: {
+        GoStraight: {
           on: {
-            TIMER: 'red'
+            TIMER: 'GoStraight'
           }
         },
-        red: {
+        TurnLeft: {
           on: {
-            TIMER: 'green'
+            TIMER: 'GoStraight'
+          }
+        },
+        TurnRight: {
+          on: {
+            TIMER: 'GoStraight'
           }
         }
       }
     });
 
     this._actor = createActor(lightMachine);
-    this._actor.subscribe((state) => {
-      console.log(' || >>> ' + state.value);
-    });
     this._actor.start();
-
-    console.log(' >>>> start ');
   }
 
-  // updateState "symuluje" metodę przypisaną do konkretnego stanu
-  private updateState(state: Actor<any>): void {
-    switch (state.getSnapshot()) {
-      case 'idle':
-        console.log('Still idle. Let\'s start!');
-        // Actor.send({ type: 'NEXT' });
-        break;
-
-      case 'loading':
-        console.log('Loading... simulate success');
-        // Actor.send({ type: 'SUCCESS' });
-        break;
-
-      case 'success':
-        console.log('We succeeded!');
-        break;
-
-      case 'error':
-        console.log('An error occurred.');
-        break;
-
-      default:
-        console.log('Unknown state.');
-    }
+  private stateTurnLeft(): void {
+    console.log('stateTurnLeft');
   }
 
+  private stateTurnRight(): void {
+    console.log('stateTurnRight');
 
-  // updateState(actor.getSnapshot()); // z idle -> NEXT
-  // updateState(actor.getSnapshot()); // z loading -> SUCCESS
-  // updateState(actor.getSnapshot()); // z success -> brak zmian
+  }
 
+  private stateGoStraight(): void {
+    console.log('stateGoStraight');
+  }
 
+  private stateStop(): void {
+    console.log('stateStop');
+  }
 }
 
 

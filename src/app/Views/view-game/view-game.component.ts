@@ -15,12 +15,12 @@ export class ViewGameComponent implements OnInit, OnDestroy {
   private player: Tank = new Tank(10, 10, 20, 40);
   private intervalId: any;
 
-  constructor(private physicService: GameService) {
+  constructor(private gameService: GameService) {
   }
 
   ngOnInit() {
-    this.physicService.createScene(this.sceneContainer.nativeElement, 800, 700);
-    this.physicService.addGameObject(this.player);
+    this.gameService.createScene(this.sceneContainer.nativeElement, 800, 700);
+    this.gameService.addGameObject(this.player);
 
     this.intervalId = setInterval(() => {
       this.update();
@@ -28,7 +28,7 @@ export class ViewGameComponent implements OnInit, OnDestroy {
   };
 
   ngOnDestroy() {
-    clearInterval(this.intervalId); // żeby nie było wycieku pamięci
+    clearInterval(this.intervalId);
   }
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -36,6 +36,6 @@ export class ViewGameComponent implements OnInit, OnDestroy {
   }
 
   update(): void {
-
+    this.gameService.update();
   }
 }
