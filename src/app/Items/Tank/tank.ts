@@ -8,6 +8,11 @@ export class Tank implements GameObject {
   private readonly _body!: Body;
   private _actor!: Actor<any>;
 
+  private static readonly directionUp: string = 'up';
+  private static readonly directionDown: string = 'down';
+  private static readonly directionLeft: string = 'left';
+  private static readonly directionRight: string = 'right';
+
   constructor(x: number, y: number, width: number, height: number) {
 
     // Gracz
@@ -55,13 +60,9 @@ export class Tank implements GameObject {
         // Actor.send({ type: 'NEXT' });
         break;
 
-      case 'TurnLeft':
+      case 'Turn':
         this.stateTurnLeft();
         // Actor.send({ type: 'SUCCESS' });
-        break;
-
-      case 'TurnRight':
-        this.stateTurnRight();
         break;
 
       case 'GoStraight':
@@ -77,19 +78,23 @@ export class Tank implements GameObject {
   public keyEvent(key: string): void {
     switch (key) {
       case 'w':
-        Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, UP_VECTOR));
+        this._actor.send({ type: 'Turn', direction: Tank.directionUp });
+        // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, UP_VECTOR));
         break;
 
       case 's':
-        Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, DOWN_VECTOR));
+        this._actor.send({ type: 'Turn', direction: Tank.directionDown });
+        // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, DOWN_VECTOR));
         break;
 
       case 'a':
-        Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, LEFT_VECTOR));
+        this._actor.send({ type: 'Turn', direction: Tank.directionLeft });
+        // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, LEFT_VECTOR));
         break;
 
       case 'd':
-        Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, RIGHT_VECTOR));
+        this._actor.send({ type: 'Turn', direction: Tank.directionRight });
+        // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, RIGHT_VECTOR));
         break;
     }
   }
@@ -98,25 +103,24 @@ export class Tank implements GameObject {
     const lightMachine = createMachine({
       id: 'tank',
       initial: 'Stop',
+      context: {
+        direction: ''
+      },
       states: {
         Stop: {
           on: {
-            TIMER: 'Stop'
+            msg_to_left: 'Turn',
+            msg_to_straight: 'GoStraight'
           }
         },
         GoStraight: {
           on: {
-            TIMER: 'GoStraight'
+            msg_to_stop: 'Stop'
           }
         },
-        TurnLeft: {
+        Turn: {
           on: {
-            TIMER: 'GoStraight'
-          }
-        },
-        TurnRight: {
-          on: {
-            TIMER: 'GoStraight'
+            msg_to_straight: 'GoStraight'
           }
         }
       }
@@ -126,13 +130,8 @@ export class Tank implements GameObject {
     this._actor.start();
   }
 
-  private stateTurnLeft(): void {
+  private stateTurn(): void {
     console.log('stateTurnLeft');
-  }
-
-  private stateTurnRight(): void {
-    console.log('stateTurnRight');
-
   }
 
   private stateGoStraight(): void {
