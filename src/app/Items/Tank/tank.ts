@@ -1,17 +1,23 @@
 
 import Matter, { Engine, Render, Runner, Bodies, Body, Composite, Events, World } from 'matter-js';
 import { GameObject } from '../game-object';
-import { createMachine, createActor, Actor } from 'xstate';
 import {DOWN_VECTOR, LEFT_VECTOR, RIGHT_VECTOR, UP_VECTOR} from '../Common/vectors';
 
 export class Tank implements GameObject {
-  private readonly _body!: Body;
-  private _actor!: Actor<any>;
+  private static readonly states = {
+    Stop: 'Stop',
+    GoStraight: 'GoStraight',
+    Turn: 'Turn',
+  };
 
-  private static readonly directionUp: string = 'up';
-  private static readonly directionDown: string = 'down';
-  private static readonly directionLeft: string = 'left';
-  private static readonly directionRight: string = 'right';
+  private statesTransitions = {
+    OnTurn: {
+      [Tank.states.Stop]: Tank.states.Turn,
+    },
+  } as const;
+
+  private readonly _body!: Body;
+  private _currentState: string = Tank.states.Stop;
 
   constructor(x: number, y: number, width: number, height: number) {
 
@@ -29,7 +35,7 @@ export class Tank implements GameObject {
       },
     });
 
-    this.createStates();
+    // this.createStates();
     // this.body = Bodies.rectangle(x, y, width, height, { render: { fillStyle: 'blue' } });
 
     // document.addEventListener('click', (event) => {
@@ -53,19 +59,16 @@ export class Tank implements GameObject {
   }
 
   public update(): void {
-    const state = this._actor.getSnapshot();
-    switch (state.value) {
-      case 'Stop':
+    switch (this._currentState) {
+      case Tank.states.Stop:
         this.stateStop();
-        // Actor.send({ type: 'NEXT' });
         break;
 
-      case 'Turn':
-        this.stateTurnLeft();
-        // Actor.send({ type: 'SUCCESS' });
+      case Tank.states.Turn:
+        this.stateTurn();
         break;
 
-      case 'GoStraight':
+      case Tank.states.GoStraight:
         this.stateGoStraight();
         break;
     }
@@ -78,56 +81,29 @@ export class Tank implements GameObject {
   public keyEvent(key: string): void {
     switch (key) {
       case 'w':
-        this._actor.send({ type: 'Turn', direction: Tank.directionUp });
+        // this._actor.send({ type: 'Turn' });
         // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, UP_VECTOR));
         break;
 
       case 's':
-        this._actor.send({ type: 'Turn', direction: Tank.directionDown });
+        // this._actor.send({ type: 'Turn' });
         // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, DOWN_VECTOR));
         break;
 
       case 'a':
-        this._actor.send({ type: 'Turn', direction: Tank.directionLeft });
+        // this._actor.send({ type: 'Turn' });
         // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, LEFT_VECTOR));
         break;
 
       case 'd':
-        this._actor.send({ type: 'Turn', direction: Tank.directionRight });
+        // this._actor.send({ type: 'Turn' });
         // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, RIGHT_VECTOR));
         break;
     }
   }
 
-  private createStates(): void {
-    const lightMachine = createMachine({
-      id: 'tank',
-      initial: 'Stop',
-      context: {
-        direction: ''
-      },
-      states: {
-        Stop: {
-          on: {
-            msg_to_left: 'Turn',
-            msg_to_straight: 'GoStraight'
-          }
-        },
-        GoStraight: {
-          on: {
-            msg_to_stop: 'Stop'
-          }
-        },
-        Turn: {
-          on: {
-            msg_to_straight: 'GoStraight'
-          }
-        }
-      }
-    });
+  private sendTransition(transition: string): void {
 
-    this._actor = createActor(lightMachine);
-    this._actor.start();
   }
 
   private stateTurn(): void {
@@ -146,28 +122,7 @@ export class Tank implements GameObject {
 
 /*
 
-
 -------------------------------------------------------------------------------------------------------------
-
-import { createMachine, createActor } from 'xstate';
-
-const machine = createMachine({
-  id: 'example',
-  initial: 'idle',
-  states: {
-    idle: { on: { NEXT: 'loading' } },
-    loading: { on: { SUCCESS: 'success', FAIL: 'error' } },
-    success: {},
-    error: {},
-  },
-});
-
-const actor = createActor(machine).start();
-
-
--------------------------------------------------------------------------------------------------------------
-
-
 
 function addCircle(x, y) {
     const circle = Bodies.circle(x, y, 20, {
