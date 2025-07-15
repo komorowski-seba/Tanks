@@ -1,12 +1,12 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(100, 10px);
-  grid-template-rows: repeat(100, 10px);
+  grid-template-columns: repeat(40, 15px);
+  grid-template-rows: repeat(40, 15px);
   gap: 1px;
 }
 
 .box {
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
   background-color: blue;
 }
