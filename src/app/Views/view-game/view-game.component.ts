@@ -12,10 +12,10 @@ import { NgFor, NgForOf } from '@angular/common';
 })
 export class ViewGameComponent implements OnInit, OnDestroy {
 
-  private player: Tank = new Tank(10, 10, 20, 40);
+  private player: Tank = new Tank(10, 10);
   private intervalId: any;
 
-  boxes: number[] = Array.from({ length: 10000 });
+  boxes: number[] = Array.from({ length: 40 * 40 });
 
   constructor() {
   }
