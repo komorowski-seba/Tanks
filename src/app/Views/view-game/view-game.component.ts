@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Tank } from '../../Items/Tank/tank';
 import { NgFor, NgForOf } from '@angular/common';
+import { GameService } from '../../services/game-service';
+
 
 @Component({
   selector: 'app-view-game',
@@ -11,20 +13,15 @@ import { NgFor, NgForOf } from '@angular/common';
   styleUrl: './view-game.component.css'
 })
 export class ViewGameComponent implements OnInit, OnDestroy {
-
-  private player: Tank = new Tank(10, 10);
   private intervalId: any;
 
-  boxes: number[] = Array.from({ length: 40 * 40 });
-
-  constructor() {
+  constructor(private gameService: GameService) {
   }
 
   ngOnInit() {
-
-    this.intervalId = setInterval(() => {
-      this.update();
-    }, 100);
+    this.intervalId = setInterval(
+      () => { this.update(); },
+      100);
   };
 
   ngOnDestroy() {
@@ -32,7 +29,7 @@ export class ViewGameComponent implements OnInit, OnDestroy {
   }
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    this.player.keyEvent(event.key);
+    this.gameService.keyEvent(event.key);
   }
 
   update(): void {
