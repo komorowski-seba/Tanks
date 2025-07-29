@@ -1,8 +1,8 @@
 
-import { GameObject } from '../game-object';
+import { IGameObject } from '../i-game-object';
 import {DOWN_VECTOR, LEFT_VECTOR, RIGHT_VECTOR, UP_VECTOR} from '../Common/vectors';
 
-export class Tank implements GameObject {
+export class Tank implements IGameObject {
 
   private x: number = 0;
   private y: number = 0;
