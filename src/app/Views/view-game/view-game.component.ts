@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { Tank } from '../../Items/Tank/tank';
 import { NgFor, NgForOf } from '@angular/common';
 import { GameService } from '../../services/game-service';
 
@@ -15,7 +14,12 @@ import { GameService } from '../../services/game-service';
 export class ViewGameComponent implements OnInit, OnDestroy {
   private intervalId: any;
 
-  constructor(private gameService: GameService) {
+
+  get gameService(): GameService {
+    return this._gameService;
+  }
+
+  constructor(private _gameService: GameService) {
   }
 
   ngOnInit() {
