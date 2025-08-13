@@ -14,7 +14,6 @@ import { GameService } from '../../services/game-service';
 export class ViewGameComponent implements OnInit, OnDestroy {
   private intervalId: any;
 
-
   get gameService(): GameService {
     return this._gameService;
   }
