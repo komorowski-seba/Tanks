@@ -7,8 +7,8 @@ export class GameService {
   private _player: Tank = new Tank(10, 10);
   private _canvas: Canvas = new Canvas(80);
 
-  get canvas(): NgIterable<any> | null {
-    return this._canvas.canvas
+  get canvas(): Canvas {
+    return this._canvas
   }
 
   public keyEvent(key: string): void {

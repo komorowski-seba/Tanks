@@ -1,5 +1,9 @@
 <p> >>> start <<<</p>
 
 <div class="grid">
-  <div class="box" *ngFor="let box of gameService.canvas"></div>
+  <div
+    class="box"
+    *ngFor="let box of gameService.canvas.canvasPoints"
+    [style.background-color]="gameService.canvas.getPointColor(box)">
+  </div>
 </div>
