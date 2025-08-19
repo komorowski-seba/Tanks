@@ -19,7 +19,35 @@ export class Canvas {
     this._boxes = Array.from({ length: size * size })
   }
 
-  public getPointColor(point: number) : string {
-    return '#7FFFD4'
+  public setColorPoint(x: number, y: number, color: number): void {
+    this._boxes[this.getIndex(x, y)] = color;
+  }
+
+  public getColorPoint(x: number, y: number): number {
+    return this._boxes[this.getIndex(x, y)];
+  }
+
+  public getPointColor(color: number) : string {
+    switch (color) {
+      case this.colorRed.number:
+        return this.colorRed.color;
+
+      case this.colorBlue.number:
+        return this.colorBlue.color;
+
+      case this.colorYellow.number:
+        return this.colorYellow.color;
+
+      case this.colorPurple.number:
+        return this.colorPurple.color;
+    }
+    return this.colorPurple.color;
+  }
+
+  private getIndex(x: number, y: number): number {
+    const wrappedX: number = ((x % this._size) + this._size) % this._size;
+    const wrappedY: number = ((y % this._size) + this._size) % this._size;
+
+    return wrappedY * this._size + wrappedX;
   }
 }

@@ -1,11 +1,15 @@
 
 import { IGameObject } from '../i-game-object';
 import {DOWN_VECTOR, LEFT_VECTOR, RIGHT_VECTOR, UP_VECTOR} from '../Common/vectors';
+import { Canvas } from '../Canvas/canvas';
 
 export class Tank implements IGameObject {
-
   private x: number = 0;
   private y: number = 0;
+  private image: number[] = [
+    1, 2, 1,
+    1, 1, 1,
+  ]
 
   // private static readonly states = {
   //   Stop: 'Stop',
@@ -24,6 +28,12 @@ export class Tank implements IGameObject {
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
+  }
+
+  draw(canvas: Canvas): void {
+    for (const img of this.image) {
+      canvas.setColorPoint()
+    }
   }
 
   public getX(): number {
