@@ -27,6 +27,12 @@ export class Canvas {
     return this._boxes[this.getIndex(x, y)];
   }
 
+  public clean(): void {
+    for (let i = 0;  i < this._boxes.length; ++i) {
+      this._boxes[i] = this.colorYellow.number;
+    }
+  }
+
   public getPointColor(color: number) : string {
     switch (color) {
       case this.colorRed.number:

@@ -36,5 +36,6 @@ export class ViewGameComponent implements OnInit, OnDestroy {
   }
 
   update(): void {
+    this._gameService.update();
   }
 }

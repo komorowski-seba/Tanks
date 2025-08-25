@@ -21,8 +21,14 @@ export class GameService {
   }
 
   public update(): void {
+    this._canvas.clean();
+
     for (const gameObject of this._gameObjects) {
       gameObject.update();
+    }
+
+    for (const gameObject of this._gameObjects) {
+      gameObject.draw(this._canvas);
     }
   }
 }
