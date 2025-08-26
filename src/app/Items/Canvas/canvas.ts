@@ -6,6 +6,7 @@ export class Canvas {
   readonly colorBlue: Color = { color: '#0000ff', number: 2 };
   readonly colorYellow: Color = { color: '#ff0000', number: 3 };
   readonly colorPurple: Color = { color: '#ffaa00', number: 4 };
+  readonly colorClean: Color = { color: '#777777', number: 0 };
 
   private _boxes: number[];
   private _size: number;
@@ -29,7 +30,7 @@ export class Canvas {
 
   public clean(): void {
     for (let i = 0;  i < this._boxes.length; ++i) {
-      this._boxes[i] = this.colorYellow.number;
+      this._boxes[i] = this.colorClean.number;
     }
   }
 
@@ -47,7 +48,7 @@ export class Canvas {
       case this.colorPurple.number:
         return this.colorPurple.color;
     }
-    return this.colorPurple.color;
+    return this.colorClean.color;
   }
 
   private getIndex(x: number, y: number): number {

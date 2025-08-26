@@ -1,6 +1,5 @@
 
 import { IGameObject } from '../i-game-object';
-import {DOWN_VECTOR, LEFT_VECTOR, RIGHT_VECTOR, UP_VECTOR} from '../Common/vectors';
 import { Canvas } from '../Canvas/canvas';
 
 export class Tank implements IGameObject {
@@ -12,19 +11,15 @@ export class Tank implements IGameObject {
     [1, 1, 1],
   ]
 
-  // private static readonly states = {
-  //   Stop: 'Stop',
-  //   GoStraight: 'GoStraight',
-  //   Turn: 'Turn',
-  // };
+  private static readonly states = {
+    stop: 'Stop',
+    goUp: 'GoUp',
+    goDown: 'GoDown',
+    goLeft: 'GoLeft',
+    goRight: 'GoRight',
+  };
 
-  // private statesTransitions = {
-  //   OnTurn: {
-  //     [Tank.states.Stop]: Tank.states.Turn,
-  //   },
-  // } as const;
-
-  // private _currentState: string = Tank.states.Stop;
+  private _currentState: string = Tank.states.stop;
 
   constructor(x: number, y: number) {
     this.x = x;
@@ -48,33 +43,55 @@ export class Tank implements IGameObject {
   }
 
   public update(): void {
-    // switch (this._currentState) {
-    //   case Tank.states.Stop:
-    //     this.stateStop();
-    //     break;
-    //
-    //   case Tank.states.Turn:
-    //     this.stateTurn();
-    //     break;
-    //
-    //   case Tank.states.GoStraight:
-    //     this.stateGoStraight();
-    //     break;
-    // }
+    switch (this._currentState) {
+      case Tank.states.stop:
+        this.stateStop();
+        break;
+
+      case Tank.states.goUp:
+        this.stateTurn();
+        break;
+
+      case Tank.states.goDown:
+        this.stateGoStraight();
+        break;
+    }
   }
+
+  /*
+
+  class Example {
+  // prywatna metoda generatora
+  private *metoda(): IterableIterator<number> {
+    let i = 0;
+    do {
+      yield i; // zwraca kolejne wartości
+      i++;
+    } while (true); // zmień warunek na sensowny
+  }
+
+  public test() {
+    const gen = this.metoda();
+    console.log(gen.next().value); // 0
+    console.log(gen.next().value); // 1
+    console.log(gen.next().value); // 2
+  }
+}
+
+   */
 
   public keyEvent(key: string): void {
     switch (key) {
       case 'w':
         // this._actor.send({ type: 'Turn' });
         // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, UP_VECTOR));
-        this.y += 1;
+        this.y -= 1;
         break;
 
       case 's':
         // this._actor.send({ type: 'Turn' });
         // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, DOWN_VECTOR));
-        this.y -= 1;
+        this.y += 1;
         break;
 
       case 'a':
