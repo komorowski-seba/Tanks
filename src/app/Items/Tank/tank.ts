@@ -3,33 +3,26 @@ import { IGameObject } from '../i-game-object';
 import { Canvas } from '../Canvas/canvas';
 
 export class Tank implements IGameObject {
-  private x: number = 0;
-  private y: number = 0;
-  private image: number[][] = [
+  private _x: number = 0;
+  private _y: number = 0;
+  private _image: number[][] = [
     [1, 2, 1],
     [1, 1, 1],
     [1, 1, 1],
   ]
-
-  private static readonly states = {
-    stop: 'Stop',
-    goUp: 'GoUp',
-    goDown: 'GoDown',
-    goLeft: 'GoLeft',
-    goRight: 'GoRight',
-  };
-
-  private _currentState: string = Tank.states.stop;
+  private _currentState: (() => IterableIterator<boolean>) | null = null;
+  private _currentStateIteration: IterableIterator<boolean> | null = null;
 
   constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+    this._x = x;
+    this._y = y;
+    this.setState(this.stateIdle);
   }
 
   draw(canvas: Canvas): void {
-    for (let y = 0; y < this.image.length; y++) {
-      for (let x = 0; x < this.image[y].length; x++) {
-        canvas.setColorPoint(this.x + x, this.y + y, this.image[y][x]);
+    for (let y = 0; y < this._image.length; y++) {
+      for (let x = 0; x < this._image[y].length; x++) {
+        canvas.setColorPoint(this._x + x, this._y + y, this._image[y][x]);
       }
     }
   }
@@ -43,84 +36,84 @@ export class Tank implements IGameObject {
   }
 
   public update(): void {
-    switch (this._currentState) {
-      case Tank.states.stop:
-        this.stateStop();
-        break;
-
-      case Tank.states.goUp:
-        this.stateTurn();
-        break;
-
-      case Tank.states.goDown:
-        this.stateGoStraight();
-        break;
-    }
+    this._currentStateIteration?.next();
   }
 
-  /*
-
-  class Example {
-  // prywatna metoda generatora
-  private *metoda(): IterableIterator<number> {
-    let i = 0;
+  private *stateIdle(): IterableIterator<boolean> {
+    console.log('set - stateIdle');
     do {
-      yield i; // zwraca kolejne wartości
-      i++;
-    } while (true); // zmień warunek na sensowny
+      console.log('stateIdle');
+      yield true;
+   } while (this._currentState == this.stateIdle);
   }
 
-  public test() {
-    const gen = this.metoda();
-    console.log(gen.next().value); // 0
-    console.log(gen.next().value); // 1
-    console.log(gen.next().value); // 2
+  private *stateGoLeft(): IterableIterator<boolean> {
+    console.log('set - stateGoLeft');
+    do {
+      console.log('stateGoLeft');
+      yield true;
+    } while (this._currentState == this.stateGoLeft);
   }
-}
 
-   */
+  private *stateGoRight(): IterableIterator<boolean> {
+    console.log('set - stateGoRight');
+    do {
+      console.log('stateGoRight');
+      yield true;
+    } while (this._currentState == this.stateGoRight);
+  }
+
+  private *stateGoUp(): IterableIterator<boolean> {
+    console.log('set - stateGoUp');
+    do {
+      console.log('stateGoUp');
+      yield true;
+    } while (this._currentState == this.stateGoUp);
+  }
+
+  private *stateGoDown(): IterableIterator<boolean> {
+    console.log('set - stateGoDown');
+    do {
+      console.log('stateGoDown');
+      yield true;
+    } while (this._currentState == this.stateGoDown);
+  }
 
   public keyEvent(key: string): void {
     switch (key) {
       case 'w':
-        // this._actor.send({ type: 'Turn' });
-        // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, UP_VECTOR));
-        this.y -= 1;
-        break;
+        this.setState(this.stateGoUp);
+        // this._y -= 1;
+        return;
 
       case 's':
-        // this._actor.send({ type: 'Turn' });
-        // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, DOWN_VECTOR));
-        this.y += 1;
-        break;
+        this.setState(this.stateGoDown);
+        // this._y += 1;
+        return;
 
       case 'a':
-        // this._actor.send({ type: 'Turn' });
-        // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, LEFT_VECTOR));
-        this.x -= 1;
-        break;
+        this.setState(this.stateGoLeft);
+        // this._x -= 1;
+        return;
 
       case 'd':
-        // this._actor.send({ type: 'Turn' });
-        // Matter.Body.setPosition(this._body, Matter.Vector.add(this._body.position, RIGHT_VECTOR));
-        this.x += 1;
-        break;
+        this.setState(this.stateGoRight);
+        // this._x += 1;
+        return;
     }
+
+    this.setState(this.stateIdle);
+  }
+
+  private setState(newState: () => IterableIterator<boolean>): void {
+    if (newState == this._currentState) {
+      return;
+    }
+
+    this._currentState = newState;
+    this._currentStateIteration = this._currentState();
   }
 
   private sendTransition(transition: string): void {
-
-  }
-
-  private stateTurn(): void {
-    console.log('stateTurnLeft');
-  }
-
-  private stateGoStraight(): void {
-    console.log('stateGoStraight');
-  }
-
-  private stateStop(): void {
-    console.log('stateStop');
   }
 }
