@@ -35,6 +35,11 @@ export class ViewGameComponent implements OnInit, OnDestroy {
     this.gameService.keyEvent(event.key);
   }
 
+  @HostListener('window:keyup', ['$event'])
+  handleKeyUpEvent(event: KeyboardEvent) {
+    this.gameService.keyEvent(' ');
+  }
+
   update(): void {
     this._gameService.update();
   }
