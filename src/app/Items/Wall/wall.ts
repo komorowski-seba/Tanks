@@ -1,20 +1,35 @@
-import { Canvas } from "../Canvas/canvas";
+import {Canvas} from "../Canvas/canvas";
 import {IGameObject} from '../i-game-object';
 
 export class Wall implements IGameObject {
+    private _x: number;
+    private _y: number;
+    private _width: number;
+    private _height: number;
+
+    public constructor(x: number, y: number, width: number, height: number) {
+      this._x = x;
+      this._y = y;
+      this._width = width;
+      this._height = height;
+    }
     update(): void {
-        throw new Error("Method not implemented.");
     }
+
     keyEvent(key: string): void {
-        throw new Error("Method not implemented.");
     }
+
     getX(): number {
-        throw new Error("Method not implemented.");
+      return this._x;
     }
     getY(): number {
-        throw new Error("Method not implemented.");
+        return this._y;
     }
     draw(canvas: Canvas): void {
-        throw new Error("Method not implemented.");
+        for (let x = 0; x < this._width; x++) {
+          for (let y = 0; y < this._height; y++) {
+            canvas.setColorPoint(this._x + x, this._y + y, Canvas.colorPurple.number);
+          }
+        }
     }
 }

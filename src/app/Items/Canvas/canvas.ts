@@ -2,11 +2,11 @@ import {NgIterable} from '@angular/core';
 import {Color} from './color';
 
 export class Canvas {
-  readonly colorRed: Color = { color: '#ff0000', number: 1 };
-  readonly colorBlue: Color = { color: '#0000ff', number: 2 };
-  readonly colorYellow: Color = { color: '#ff0000', number: 3 };
-  readonly colorPurple: Color = { color: '#ffaa00', number: 4 };
-  readonly colorClean: Color = { color: '#777777', number: 0 };
+  public static readonly colorRed: Color = { color: '#ff0000', number: 1 };
+  public static readonly colorBlue: Color = { color: '#0000ff', number: 2 };
+  public static readonly colorYellow: Color = { color: '#ff0000', number: 3 };
+  public static readonly colorPurple: Color = { color: '#ffaa00', number: 4 };
+  public static readonly colorClean: Color = { color: '#777777', number: 0 };
 
   private _boxes: number[];
   private _size: number;
@@ -30,25 +30,25 @@ export class Canvas {
 
   public clean(): void {
     for (let i = 0;  i < this._boxes.length; ++i) {
-      this._boxes[i] = this.colorClean.number;
+      this._boxes[i] = Canvas.colorClean.number;
     }
   }
 
   public getPointColor(color: number) : string {
     switch (color) {
-      case this.colorRed.number:
-        return this.colorRed.color;
+      case Canvas.colorRed.number:
+        return Canvas.colorRed.color;
 
-      case this.colorBlue.number:
-        return this.colorBlue.color;
+      case Canvas.colorBlue.number:
+        return Canvas.colorBlue.color;
 
-      case this.colorYellow.number:
-        return this.colorYellow.color;
+      case Canvas.colorYellow.number:
+        return Canvas.colorYellow.color;
 
-      case this.colorPurple.number:
-        return this.colorPurple.color;
+      case Canvas.colorPurple.number:
+        return Canvas.colorPurple.color;
     }
-    return this.colorClean.color;
+    return Canvas.colorClean.color;
   }
 
   private getIndex(x: number, y: number): number {

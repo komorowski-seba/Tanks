@@ -44,8 +44,8 @@ export class Tank implements IGameObject {
   }
 
   draw(canvas: Canvas): void {
-    for (let y = 0; y < this._image.length; y++) {
-      for (let x = 0; x < this._image[y].length; x++) {
+    for (let y = 0; y < this._image[this._imgNumber].length; y++) {
+      for (let x = 0; x < this._image[this._imgNumber][y].length; x++) {
         canvas.setColorPoint(this._x + x, this._y + y, this._image[this._imgNumber][y][x]);
       }
     }
