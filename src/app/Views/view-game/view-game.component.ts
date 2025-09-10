@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { NgFor, NgForOf } from '@angular/common';
-import { GameService } from '../../services/game-service';
+import {Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {NgFor, NgForOf} from '@angular/common';
+import {GameService} from '../../services/game-service';
 
 
 @Component({

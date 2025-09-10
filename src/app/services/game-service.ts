@@ -2,12 +2,17 @@ import {Injectable} from '@angular/core';
 import {Tank} from '../Items/Tank/tank';
 import {Canvas} from '../Items/Canvas/canvas';
 import {IGameObject} from '../Items/i-game-object';
+import {Wall} from '../Items/Wall/wall';
+import {IGameService} from './igame-service';
 
 @Injectable({ providedIn: 'root' })
-export class GameService {
+export class GameService implements IGameService {
   private _canvas: Canvas = new Canvas(80);
   private _gameObjects: IGameObject[] = [
-    new Tank(10, 10),
+    new Tank(10, 10, this),
+    new Wall(1, 1, 3, 3),
+    new Wall(4, 1, 3, 3),
+    new Wall(10, 1, 3, 3),
   ];
 
   get canvas(): Canvas {
@@ -30,5 +35,13 @@ export class GameService {
     for (const gameObject of this._gameObjects) {
       gameObject.draw(this._canvas);
     }
+  }
+
+  public checkCollisionWithWall(gameObject: IGameObject): IGameObject | null {
+    for (const gameObject of this._gameObjects) {
+
+    }
+
+    return null;
   }
 }

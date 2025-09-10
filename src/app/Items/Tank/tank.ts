@@ -1,6 +1,7 @@
 
 import { IGameObject } from '../i-game-object';
 import { Canvas } from '../Canvas/canvas';
+import {IGameService} from '../../services/igame-service';
 
 export class Tank implements IGameObject {
   readonly imgUp: number = 0;
@@ -35,12 +36,13 @@ export class Tank implements IGameObject {
   ]
   private _currentState: (() => IterableIterator<boolean>) | null = null;
   private _currentStateIteration: IterableIterator<boolean> | null = null;
+  private _gameService: IGameService;
 
-
-  constructor(x: number, y: number) {
+  constructor(x: number, y: number, gameService: IGameService) {
     this._x = x;
     this._y = y;
     this.setState(this.stateIdle);
+    this._gameService = gameService;
   }
 
   draw(canvas: Canvas): void {
@@ -63,48 +65,6 @@ export class Tank implements IGameObject {
     this._currentStateIteration?.next();
   }
 
-  private *stateIdle(): IterableIterator<boolean> {
-    do {
-      yield true;
-   } while (this._currentState == this.stateIdle);
-  }
-
-  private *stateGoLeft(): IterableIterator<boolean> {
-    this._imgNumber = this.imgLeft;
-
-    do {
-      this._x -= 1;
-      yield true;
-    } while (this._currentState == this.stateGoLeft);
-  }
-
-  private *stateGoRight(): IterableIterator<boolean> {
-    this._imgNumber = this.imgRight;
-
-    do {
-      this._x += 1;
-      yield true;
-    } while (this._currentState == this.stateGoRight);
-  }
-
-  private *stateGoUp(): IterableIterator<boolean> {
-    this._imgNumber = this.imgUp;
-
-    do {
-      this._y -= 1;
-      yield true;
-    } while (this._currentState == this.stateGoUp);
-  }
-
-  private *stateGoDown(): IterableIterator<boolean> {
-    this._imgNumber = this.imgDown;
-
-    do {
-      this._y += 1;
-      yield true;
-    } while (this._currentState == this.stateGoDown);
-  }
-
   public keyEvent(key: string): void {
     switch (key) {
       case 'w':
@@ -125,6 +85,66 @@ export class Tank implements IGameObject {
     }
 
     this.setState(this.stateIdle);
+  }
+
+  private checkCollisionWithWall(): boolean {
+    let wall: IGameObject | null = this._gameService.checkCollisionWithWall(this);
+
+    return false;
+  }
+
+  private *stateIdle(): IterableIterator<boolean> {
+    do {
+      yield true;
+   } while (this._currentState == this.stateIdle);
+  }
+
+  private *stateGoLeft(): IterableIterator<boolean> {
+    this._imgNumber = this.imgLeft;
+
+    do {
+      if (!this.checkCollisionWithWall()) {
+        this._x -= 1;
+      }
+
+      yield true;
+    } while (this._currentState == this.stateGoLeft);
+  }
+
+  private *stateGoRight(): IterableIterator<boolean> {
+    this._imgNumber = this.imgRight;
+
+    do {
+      if (!this.checkCollisionWithWall()) {
+        this._x += 1;
+      }
+
+      yield true;
+    } while (this._currentState == this.stateGoRight);
+  }
+
+  private *stateGoUp(): IterableIterator<boolean> {
+    this._imgNumber = this.imgUp;
+
+    do {
+      if (!this.checkCollisionWithWall()) {
+        this._y -= 1;
+      }
+
+      yield true;
+    } while (this._currentState == this.stateGoUp);
+  }
+
+  private *stateGoDown(): IterableIterator<boolean> {
+    this._imgNumber = this.imgDown;
+
+    do {
+      if (!this.checkCollisionWithWall()) {
+        this._y += 1;
+      }
+
+      yield true;
+    } while (this._currentState == this.stateGoDown);
   }
 
   private setState(newState: () => IterableIterator<boolean>): void {
