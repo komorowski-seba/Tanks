@@ -13,21 +13,25 @@ export class Tank implements IGameObject {
   private _y: number = 0;
   private _imgNumber: number = this.imgRight;
   private _image: number[][][] = [
+    // up
     [
       [1, 2, 1],
       [1, 2, 1],
       [1, 1, 1],
     ],
+    // down
     [
       [1, 1, 1],
       [1, 2, 1],
       [1, 2, 1],
     ],
+    // left
     [
       [1, 1, 1],
       [2, 2, 1],
       [1, 1, 1],
     ],
+    // right
     [
       [1, 1, 1],
       [1, 2, 2],
@@ -92,6 +96,8 @@ export class Tank implements IGameObject {
 
     return false;
   }
+
+  // states
 
   private *stateIdle(): IterableIterator<boolean> {
     do {
