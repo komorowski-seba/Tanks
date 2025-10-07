@@ -4,7 +4,7 @@ import {Canvas} from '../Items/Canvas/canvas';
 import {IGameObject} from '../Items/i-game-object';
 import {Wall} from '../Items/Wall/wall';
 import {IGameService} from './igame-service';
-import {IVector} from '../Items/Common/ivector';
+import {Vector} from '../Items/Common/vector';
 import {IRect} from '../Items/Common/irect';
 
 @Injectable({ providedIn: 'root' })
@@ -39,7 +39,7 @@ export class GameService implements IGameService {
     }
   }
 
-  public checkCollisionWithWall(gameObject: IGameObject, move: IVector): IGameObject | null {
+  public checkCollisionWithWall(gameObject: IGameObject, move: Vector): IGameObject | null {
     for (const gameObject of this._gameObjects) {
       if (gameObject instanceof Wall) {
 

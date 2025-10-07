@@ -1,6 +1,6 @@
 import {IGameObject} from '../Items/i-game-object';
-import {IVector} from '../Items/Common/ivector';
+import {Vector} from '../Items/Common/vector';
 
 export interface IGameService {
-  checkCollisionWithWall(gameObject: IGameObject, move: IVector): IGameObject | null;
+  checkCollisionWithWall(gameObject: IGameObject, move: Vector): IGameObject | null;
 }
