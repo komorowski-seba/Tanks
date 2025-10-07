@@ -5,7 +5,7 @@ import {IGameObject} from '../Items/i-game-object';
 import {Wall} from '../Items/Wall/wall';
 import {IGameService} from './igame-service';
 import {Vector} from '../Items/Common/vector';
-import {IRect} from '../Items/Common/irect';
+import {Rect} from '../Items/Common/rect';
 
 @Injectable({ providedIn: 'root' })
 export class GameService implements IGameService {
@@ -49,7 +49,7 @@ export class GameService implements IGameService {
     return null;
   }
 
-  public checkCollision(a: IRect, b: IRect): boolean {
+  public checkCollision(a: Rect, b: Rect): boolean {
     return a.x < b.x + b.width &&
       a.x + a.width > b.x &&
       a.y < b.y + b.height &&

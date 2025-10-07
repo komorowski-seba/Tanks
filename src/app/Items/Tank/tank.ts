@@ -2,6 +2,9 @@
 import { IGameObject } from '../i-game-object';
 import { Canvas } from '../Canvas/canvas';
 import {IGameService} from '../../services/igame-service';
+import {Vector} from '../Common/vector';
+import {Rect} from '../Common/rect';
+import {DOWN_VECTOR, LEFT_VECTOR, RIGHT_VECTOR, UP_VECTOR} from '../Common/vectors';
 
 export class Tank implements IGameObject {
   readonly imgUp: number = 0;
@@ -65,6 +68,10 @@ export class Tank implements IGameObject {
     return this._y;
   }
 
+  public getRect(): Rect {
+    return new Rect(this._x, this._y, 3, 3);
+  }
+
   public update(): void {
     this._currentStateIteration?.next();
   }
@@ -91,8 +98,8 @@ export class Tank implements IGameObject {
     this.setState(this.stateIdle);
   }
 
-  private checkCollisionWithWall(): boolean {
-    let wall: IGameObject | null = this._gameService.checkCollisionWithWall(this);
+  private checkCollisionWithWall(move: Vector): boolean {
+    let wall: IGameObject | null = this._gameService.checkCollisionWithWall(this, move);
 
     return false;
   }
@@ -109,7 +116,7 @@ export class Tank implements IGameObject {
     this._imgNumber = this.imgLeft;
 
     do {
-      if (!this.checkCollisionWithWall()) {
+      if (!this.checkCollisionWithWall(LEFT_VECTOR)) {
         this._x -= 1;
       }
 
@@ -121,7 +128,7 @@ export class Tank implements IGameObject {
     this._imgNumber = this.imgRight;
 
     do {
-      if (!this.checkCollisionWithWall()) {
+      if (!this.checkCollisionWithWall(RIGHT_VECTOR)) {
         this._x += 1;
       }
 
@@ -133,7 +140,7 @@ export class Tank implements IGameObject {
     this._imgNumber = this.imgUp;
 
     do {
-      if (!this.checkCollisionWithWall()) {
+      if (!this.checkCollisionWithWall(UP_VECTOR)) {
         this._y -= 1;
       }
 
@@ -145,7 +152,7 @@ export class Tank implements IGameObject {
     this._imgNumber = this.imgDown;
 
     do {
-      if (!this.checkCollisionWithWall()) {
+      if (!this.checkCollisionWithWall(DOWN_VECTOR)) {
         this._y += 1;
       }
 

@@ -1,4 +1,5 @@
 import {Canvas} from './Canvas/canvas';
+import {Rect} from './Common/rect';
 
 export interface IGameObject {
   update(): void;
@@ -6,5 +7,6 @@ export interface IGameObject {
   getX(): number;
   getY(): number;
   draw(canvas: Canvas): void;
+  getRect(): Rect;
 }
 
