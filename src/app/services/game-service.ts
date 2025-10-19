@@ -39,21 +39,26 @@ export class GameService implements IGameService {
     }
   }
 
-  public checkCollisionWithWall(gameObject: IGameObject, move: Vector): IGameObject | null {
-    for (const gameObject of this._gameObjects) {
-      if (gameObject instanceof Wall) {
+  public checkCollision(gameObject: IGameObject, move: Vector): IGameObject[] {
+    let result: IGameObject[] = [];
+    let newPosition = gameObject.getRect().move(move);
 
-      }
+    for (const g of this._gameObjects) {
+        if (g === gameObject)
+          continue;
+
+        if (this.checkRectCollision(newPosition, g.getRect()))
+          result.push(g);
     }
 
-    return null;
+    return result;
   }
 
-  public checkCollision(a: Rect, b: Rect): boolean {
-    return a.x < b.x + b.width &&
-      a.x + a.width > b.x &&
-      a.y < b.y + b.height &&
-      a.y + a.height > b.y;
+  private checkRectCollision(a: Rect, b: Rect): boolean {
+    return !(a.x + a.width <= b.x ||
+      b.x + b.width <= a.x ||
+      a.y + a.height <= b.y ||
+      b.y + b.height <= a.y);
   }
 
 }

@@ -99,9 +99,8 @@ export class Tank implements IGameObject {
   }
 
   private checkCollisionWithWall(move: Vector): boolean {
-    let wall: IGameObject | null = this._gameService.checkCollisionWithWall(this, move);
-
-    return false;
+    let collisions = this._gameService.checkCollision(this, move);
+    return collisions.length > 0;
   }
 
   // states

@@ -33,8 +33,8 @@ export class Wall implements IGameObject {
     }
 
     draw(canvas: Canvas): void {
-      for (let x = 0; x < this._width; x++) {
-        for (let y = 0; y < this._height; y++) {
+      for (let x = 0; x < this._width; ++x) {
+        for (let y = 0; y < this._height; ++y) {
           canvas.setColorPoint(this._x + x, this._y + y, Canvas.colorPurple.number);
         }
       }
