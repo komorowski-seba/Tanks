@@ -5,6 +5,7 @@ import {IGameService} from '../../services/igame-service';
 import {Vector} from '../Common/vector';
 import {Rect} from '../Common/rect';
 import {DOWN_VECTOR, LEFT_VECTOR, RIGHT_VECTOR, UP_VECTOR} from '../Common/vectors';
+import {State} from '../state';
 
 export class Tank implements IGameObject {
   readonly imgUp: number = 0;
@@ -41,14 +42,12 @@ export class Tank implements IGameObject {
       [1, 1, 1],
     ],
   ]
-  private _currentState: (() => IterableIterator<boolean>) | null = null;
-  private _currentStateIteration: IterableIterator<boolean> | null = null;
   private _gameService: IGameService;
+  private _state: State = new State(this.stateIdle);
 
   constructor(x: number, y: number, gameService: IGameService) {
     this._x = x;
     this._y = y;
-    this.setState(this.stateIdle);
     this._gameService = gameService;
   }
 
@@ -72,30 +71,26 @@ export class Tank implements IGameObject {
     return new Rect(this._x, this._y, 3, 3);
   }
 
-  public update(): void {
-    this._currentStateIteration?.next();
-  }
-
   public keyEvent(key: string): void {
     switch (key) {
       case 'w':
-        this.setState(this.stateGoUp);
+        this._state.setState(this.stateGoUp);
         return;
 
       case 's':
-        this.setState(this.stateGoDown);
+        this._state.setState(this.stateGoDown);
         return;
 
       case 'a':
-        this.setState(this.stateGoLeft);
+        this._state.setState(this.stateGoLeft);
         return;
 
       case 'd':
-        this.setState(this.stateGoRight);
+        this._state.setState(this.stateGoRight);
         return;
     }
 
-    this.setState(this.stateIdle);
+    this._state.setState(this.stateIdle);
   }
 
   private checkCollisionWithWall(move: Vector): boolean {
@@ -108,7 +103,7 @@ export class Tank implements IGameObject {
   private *stateIdle(): IterableIterator<boolean> {
     do {
       yield true;
-   } while (this._currentState == this.stateIdle);
+   } while (this._state.current == this.stateIdle);
   }
 
   private *stateGoLeft(): IterableIterator<boolean> {
@@ -120,7 +115,7 @@ export class Tank implements IGameObject {
       }
 
       yield true;
-    } while (this._currentState == this.stateGoLeft);
+    } while (this._state.current == this.stateGoLeft);
   }
 
   private *stateGoRight(): IterableIterator<boolean> {
@@ -132,7 +127,7 @@ export class Tank implements IGameObject {
       }
 
       yield true;
-    } while (this._currentState == this.stateGoRight);
+    } while (this._state.current == this.stateGoRight);
   }
 
   private *stateGoUp(): IterableIterator<boolean> {
@@ -144,7 +139,7 @@ export class Tank implements IGameObject {
       }
 
       yield true;
-    } while (this._currentState == this.stateGoUp);
+    } while (this._state.current == this.stateGoUp);
   }
 
   private *stateGoDown(): IterableIterator<boolean> {
@@ -156,17 +151,9 @@ export class Tank implements IGameObject {
       }
 
       yield true;
-    } while (this._currentState == this.stateGoDown);
+    } while (this._state.current == this.stateGoDown);
   }
 
-  private setState(newState: () => IterableIterator<boolean>): void {
-    if (newState == this._currentState) {
-      return;
-    }
-
-    this._currentState = newState;
-    this._currentStateIteration = this._currentState();
-  }
 
   private sendTransition(transition: string): void {
   }

@@ -24,4 +24,7 @@ export class Bullet implements IGameObject {
 
   update(): void {
   }
+
+  // states
+
 }
